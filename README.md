@@ -306,6 +306,18 @@ config.handlebars.precompile = false
 
 _(Note: you must clear the local sprockets cache if you disable precompilation, stored by default in `tmp/cache/assets`)_
 
+## Fixing "No route matches" errors on deep links
+
+If you are using Ember's normal (non-hash) routing and you open a deep link directly (for example from an external redirect like `rsvy.io`), Rails will try to route that path first and can raise `ActionController::RoutingError (No route matches ...)`.
+
+To have Rails serve your Ember app "shell" for unknown HTML routes (including URLs with dots in IDs/slugs), you can generate a catch-all route + controller:
+
+```shell
+rails g ember:spa_fallback
+```
+
+This adds a `get '*path', ... format: false` fallback at the bottom of `config/routes.rb` and a simple controller/view to render your normal layout so the Ember router can take over.
+
 Bundle all templates together thanks to Sprockets,
 e.g create `app/assets/javascripts/templates/all.js` with:
 
